@@ -1,24 +1,18 @@
 /*
-	Miniport by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+	Gravity by Pixelarity
+	pixelarity.com @pixelarity
+	License: pixelarity.com/license
 */
 
 (function($) {
 
-	skel
-		.breakpoints({
-			desktop: '(min-width: 737px)',
-			tablet: '(min-width: 737px) and (max-width: 1200px)',
-			mobile: '(max-width: 736px)'
-		})
-		.viewport({
-			breakpoints: {
-				tablet: {
-					width: 1080
-				}
-			}
-		});
+	skel.breakpoints({
+		xlarge: '(max-width: 1680px)',
+		large: '(max-width: 1280px)',
+		medium: '(max-width: 980px)',
+		small: '(max-width: 736px)',
+		xsmall: '(max-width: 480px)'
+	});
 
 	$(function() {
 
@@ -32,30 +26,142 @@
 				$body.removeClass('is-loading');
 			});
 
+		// Touch mode.
+			if (skel.vars.mobile)
+				$body.addClass('is-touch');
+
 		// Fix: Placeholder polyfill.
 			$('form').placeholder();
 
-		// Prioritize "important" elements on mobile.
-			skel.on('+mobile -mobile', function() {
+		// Prioritize "important" elements on medium.
+			skel.on('+medium -medium', function() {
 				$.prioritize(
-					'.important\\28 mobile\\29',
-					skel.breakpoint('mobile').active
+					'.important\\28 medium\\29',
+					skel.breakpoint('medium').active
 				);
 			});
 
-		// CSS polyfills (IE<9).
-			if (skel.vars.IEVersion < 9)
-				$(':last-child').addClass('last-child');
+		// Dropdowns.
+			$('#nav > ul').dropotron({
+				alignment: ($body.hasClass('landing') ? 'center' : 'right'),
+				hideDelay: 400
+			});
 
-		// Scrolly.
-			$window.load(function() {
+		// Off-Canvas Navigation.
 
-				var x = parseInt($('.wrapper').first().css('padding-top')) - 15;
+			// Title Bar.
+				$(
+					'<div id="titleBar">' +
+						'<a href="#navPanel" class="toggle"></a>' +
+						'<span class="title">' + $('#logo').html() + '</span>' +
+					'</div>'
+				)
+					.appendTo($body);
 
-				$('#nav a, .scrolly').scrolly({
-					speed: 1000,
-					offset: x
-				});
+			// Navigation Panel.
+				$(
+					'<div id="navPanel">' +
+						'<nav>' +
+							$('#nav').navList() +
+						'</nav>' +
+					'</div>'
+				)
+					.appendTo($body)
+					.panel({
+						delay: 500,
+						hideOnClick: true,
+						hideOnSwipe: true,
+						resetScroll: true,
+						resetForms: true,
+						side: 'left',
+						target: $body,
+						visibleClass: 'navPanel-visible'
+					});
+
+			// Fix: Remove transitions on WP<10 (poor/buggy performance).
+				if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
+					$('#navPanel')
+						.css('transition', 'none');
+
+		// Carousel.
+			$('.carousel').each(function() {
+
+				var	$this = $(this);
+
+				if (!skel.vars.touch) {
+
+					$this.css('overflow-x', 'hidden');
+
+					// Wrapper.
+						$this.wrap('<div class="carousel-wrapper" />');
+						var $wrapper = $this.parent();
+
+					// Nav.
+						var	$navRight = $('<div class="nav right"></div>').insertAfter($this),
+							$navLeft = $('<div class="nav left"></div>').insertAfter($this),
+							intervalId;
+
+						$navLeft
+							.on('mouseenter', function() {
+								intervalId = window.setInterval(function() {
+									$this.scrollLeft( $this.scrollLeft() - 5 );
+								}, 10);
+							})
+							.on('mouseleave', function() {
+								window.clearInterval(intervalId);
+							});
+
+						$navRight
+							.on('mouseenter', function() {
+								intervalId = window.setInterval(function() {
+									$this.scrollLeft( $this.scrollLeft() + 5 );
+								}, 10);
+							})
+							.on('mouseleave', function() {
+								window.clearInterval(intervalId);
+							});
+
+					// Events.
+						$window
+							.on('resize load', function() {
+
+								if ($this.width() < $this.prop('scrollWidth'))
+									$wrapper.removeClass('no-scroll');
+								else
+									$wrapper.addClass('no-scroll');
+
+							});
+
+				}
+
+				// Poptrox.
+					var p = {
+						baseZIndex: 100001,
+						useBodyOverflow: false,
+						usePopupEasyClose: false,
+						overlayColor: '#000000',
+						overlayOpacity: 0.75,
+						usePopupDefaultStyling: false,
+						popupLoaderText: '',
+						usePopupNav: true
+					};
+
+					if (skel.breakpoint('small').active) {
+
+						p.usePopupCaption = false;
+						p.usePopupCloser = false;
+						p.windowMargin = 10;
+
+					}
+					else {
+
+						p.usePopupCaption = true;
+						p.usePopupCloser = true;
+						p.windowMargin = 50;
+
+					}
+
+					$this.poptrox(p);
 
 			});
 
