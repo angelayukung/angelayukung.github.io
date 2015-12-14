@@ -1583,6 +1583,7 @@
 
 		a:hover {
 			text-decoration: none;
+			color: #F4D2C9;
 		}
 
 	strong, b {
@@ -2478,6 +2479,22 @@
 		max-width:50%;
 	}
 
+.overlay {
+	visibility: hidden;
+	background-color:rgba(105, 105, 105, 0);
+	position: absolute;
+	width: inherit;
+	opacity:0;
+}
+/*
+.piece:hover .overlay{
+	visibility:visible;
+	background-color: rgba(105, 105, 105, 0.5);
+	opacity: 1;
+		position: absolute;
+	width: inherit;
+}
+*/
 
 #tandlr {
 	background-color: #EDE8F9;
@@ -2501,7 +2518,7 @@
 }
 
 #faceny {
-	background-color: #F9F5E8;
+	background-color: #FCE3D2;
 }
 
 
@@ -2685,6 +2702,10 @@
 						transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 						color: #616161;
 						text-decoration: none;
+					}
+
+					#header nav > ul > li a:hover {
+						color: #F4D2C9;
 					}
 
 					#header nav > ul > li:first-child {
@@ -2891,21 +2912,37 @@
 			text-align: center;
 			margin: 0 0 4em 0;
 		}
+/* About me */
 
+.wow img {
+	position: absolute;
+	max-width: 100px;
+	margin: 0 auto;
+	transform:translate(20em, -10em);
+}
 
 /* Contact */
 
 #contact ul {
 	list-style: none;
 	margin: 3em auto 6em auto;
+	padding-left: 0;
 }
 
+#contact h2 {
+	margin-bottom: 2em;
+}
 #contact li {
 	display:inline;
 	margin: 2em;
 }
 #contact a {
-	color: gray;
+
+	-moz-transition: color 0.2s ease-in-out;
+	-webkit-transition: color 0.2s ease-in-out;
+	-ms-transition: color 0.2s ease-in-out;
+	transition: color 0.2s ease-in-out;
+	color: #616161;
 }
 
 #contact a:hover {
@@ -2916,6 +2953,9 @@
 	font-size: 2em;
 }
 
+#contact {
+	padding-bottom: 3em;
+}
 
 
 /* Footer */
@@ -3308,7 +3348,7 @@
 		/* Wrapper */
 
 			.wrapper {
-				padding: 6em 0 4em 0 ;
+				padding-top: 6em;
 			}
 
 		/* Header */
